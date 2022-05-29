@@ -8,9 +8,9 @@ variable "instance" {
   default = "t2.medium"
 }
 
-variable "tags" {
-  type = map(string)
-  default = {
-    "Name" = "by-terraform"
+locals {
+  tags = {
+    "Name" = var.name,
+    "generated-by" = "terraform"
   }
 }

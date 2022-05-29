@@ -64,18 +64,18 @@ resource "aws_instance" "ec2" {
 #    # EC2終了時に削除
 #    delete_on_termination = true
 #
-#    tags = var.tags
+#    tags = local.tags
 #  }
 
-  tags = var.tags
+  tags = local.tags
 }
 
 ####################
 # EC2 Security Group
 ####################
 resource "aws_security_group" "ec2" {
-  name        = "inomaso-dev-ec2-sg"
-  description = "inomaso-dev-ec2-sg"
+  name        = "${var.name}-ec2"
+  description = "${var.name}-ec2"
   vpc_id      = aws_vpc.vpc.id
   egress {
     from_port   = 0
@@ -84,7 +84,7 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = var.tags
+  tags = local.tags
 }
 
 

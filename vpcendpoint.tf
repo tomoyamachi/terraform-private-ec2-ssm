@@ -69,8 +69,8 @@ resource "aws_vpc_endpoint" "s3" {
 # VPC Endpoint Security Group
 ####################
 resource "aws_security_group" "ssm" {
-  name        = var.name
-  description = var.name
+  name        = "${var.name}-ssm-endpoint"
+  description = "${var.name}-ssm-endpoint"
   vpc_id      = aws_vpc.vpc.id
   ingress {
     from_port   = 443
@@ -81,5 +81,5 @@ resource "aws_security_group" "ssm" {
     ]
   }
 
-  tags = var.tags
+  tags = local.tags
 }
