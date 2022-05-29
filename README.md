@@ -17,3 +17,6 @@ curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/sessi
 sudo installer -pkg session-manager-plugin.pkg -target /
 sudo ln -s /usr/local/sessionmanagerplugin/bin/session-manager-plugin /usr/local/bin/session-manager-plugin
 ```
+
+Attention:
+Only allowed terraform applied user arn. Check [for-client.tf](./for-client.tf).
