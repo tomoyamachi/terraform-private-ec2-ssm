@@ -45,27 +45,27 @@ resource "aws_instance" "ec2" {
   key_name               = aws_key_pair.example.id
   subnet_id              = aws_subnet.sub_app_1a.id
 
-  # EBS最適化を有効
-  ebs_optimized = "true"
 
   # IAM Role
   iam_instance_profile = "EC2RoleforSSM"
 
+  # EBS最適化を有効
+  #  ebs_optimized = true
   # EBSのルートボリューム設定
-  root_block_device {
-    # ボリュームサイズ(GiB)
-    volume_size           = 8
-    # ボリュームタイプ
-    volume_type           = "gp3"
-    # GP3のIOPS
-    iops                  = 3000
-    # GP3のスループット
-    throughput            = 125
-    # EC2終了時に削除
-    delete_on_termination = true
-
-    tags = var.tags
-  }
+#  root_block_device {
+#    # ボリュームサイズ(GiB)
+#    volume_size           = 8
+#    # ボリュームタイプ
+#    volume_type           = "gp3"
+#    # GP3のIOPS
+#    iops                  = 3000
+#    # GP3のスループット
+#    throughput            = 125
+#    # EC2終了時に削除
+#    delete_on_termination = true
+#
+#    tags = var.tags
+#  }
 
   tags = var.tags
 }
