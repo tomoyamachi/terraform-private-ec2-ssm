@@ -1,0 +1,1 @@
+# terraform-private-ec2-ssm
