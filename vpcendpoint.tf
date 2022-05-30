@@ -58,17 +58,6 @@ resource "aws_vpc_endpoint" "ec2messages" {
   tags = merge(local.tags, {Name="${var.name}-ec2-messages"})
 }
 
-resource "aws_vpc_endpoint" "s3" {
-  vpc_endpoint_type = "Gateway"
-  vpc_id            = aws_vpc.vpc.id
-  service_name      = "com.amazonaws.ap-northeast-1.s3"
-  policy            = data.aws_iam_policy_document.vpc_endpoint.json
-  route_table_ids = [
-    aws_route_table.NAT_route_table.id
-  ]
-  tags = merge(local.tags, {Name="${var.name}-s3"})
-}
-
 ####################
 # VPC Endpoint Security Group
 ####################
