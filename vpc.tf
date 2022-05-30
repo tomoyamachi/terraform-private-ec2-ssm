@@ -21,7 +21,7 @@ resource "aws_subnet" "sub_privatelink_1a" {
   tags = local.tags
 }
 
-resource "aws_subnet" "sub_app_1a" {
+resource "aws_subnet" "private_subnet" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.11.0/24"
   availability_zone = "ap-northeast-1a"
@@ -34,18 +34,7 @@ resource "aws_route_table" "privatelink_rt" {
   tags = local.tags
 }
 
-resource "aws_route_table" "app_rt" {
-  vpc_id = aws_vpc.vpc.id
-
-  tags = local.tags
-}
-
 resource "aws_route_table_association" "sub_privatelink_1a_rt_assocication" {
   subnet_id      = aws_subnet.sub_privatelink_1a.id
   route_table_id = aws_route_table.privatelink_rt.id
-}
-
-resource "aws_route_table_association" "sub_app_1a_rt_assocication" {
-  subnet_id      = aws_subnet.sub_app_1a.id
-  route_table_id = aws_route_table.app_rt.id
 }

@@ -61,7 +61,7 @@ resource "aws_vpc_endpoint" "s3" {
   service_name      = "com.amazonaws.ap-northeast-1.s3"
   policy            = data.aws_iam_policy_document.vpc_endpoint.json
   route_table_ids = [
-    aws_route_table.app_rt.id
+    aws_route_table.NAT_route_table.id
   ]
 }
 

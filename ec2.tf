@@ -43,7 +43,7 @@ resource "aws_instance" "ec2" {
   instance_type          = var.instance
   vpc_security_group_ids = [aws_security_group.ec2.id]
   key_name               = aws_key_pair.example.id
-  subnet_id              = aws_subnet.sub_app_1a.id
+  subnet_id              = aws_subnet.private_subnet.id
 
 
   # IAM Role

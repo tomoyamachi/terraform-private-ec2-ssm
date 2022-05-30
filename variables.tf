@@ -1,6 +1,7 @@
 variable "name" {
   type = string
   description = "VPC and Instance name."
+  default = "test"
 }
 
 variable "instance" {
