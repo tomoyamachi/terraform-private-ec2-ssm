@@ -67,7 +67,7 @@ resource "aws_instance" "ec2" {
 #    tags = local.tags
 #  }
 
-  tags = local.tags
+  tags = merge(local.tags, {Name="${var.name}-ec2"})
 }
 
 ####################
@@ -84,7 +84,7 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = local.tags
+  tags = merge(local.tags, {Name="${var.name}-sg-ec2"})
 }
 
 
@@ -104,6 +104,7 @@ data "aws_iam_policy_document" "ssm_role" {
 resource "aws_iam_instance_profile" "ssm_role" {
   name = "EC2RoleforSSM"
   role = aws_iam_role.ssm_role.name
+
 }
 
 resource "aws_iam_role" "ssm_role" {

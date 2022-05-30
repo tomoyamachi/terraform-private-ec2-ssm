@@ -25,6 +25,7 @@ resource "aws_vpc_endpoint" "ssm" {
   security_group_ids = [
     aws_security_group.ssm.id
   ]
+  tags = merge(local.tags, {Name="${var.name}-ssm"})
 }
 
 resource "aws_vpc_endpoint" "ssmmessages" {
@@ -39,6 +40,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
   security_group_ids = [
     aws_security_group.ssm.id
   ]
+  tags = merge(local.tags, {Name="${var.name}-ssm-messages"})
 }
 
 resource "aws_vpc_endpoint" "ec2messages" {
@@ -53,6 +55,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
   security_group_ids = [
     aws_security_group.ssm.id
   ]
+  tags = merge(local.tags, {Name="${var.name}-ec2-messages"})
 }
 
 resource "aws_vpc_endpoint" "s3" {
@@ -63,6 +66,7 @@ resource "aws_vpc_endpoint" "s3" {
   route_table_ids = [
     aws_route_table.NAT_route_table.id
   ]
+  tags = merge(local.tags, {Name="${var.name}-s3"})
 }
 
 ####################
@@ -81,5 +85,5 @@ resource "aws_security_group" "ssm" {
     ]
   }
 
-  tags = local.tags
+  tags = merge(local.tags, {Name="${var.name}-ssm-endpoint"})
 }

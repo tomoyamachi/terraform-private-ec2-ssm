@@ -1,10 +1,9 @@
 # ref: https://medium.com/@kuldeep.rajpurohit/vpc-with-public-and-private-subnet-nat-on-aws-using-terraform-85a18d17c95e
 resource "aws_subnet" "public_subnet" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = "10.0.10.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = "10.0.10.0/24"
   availability_zone = "ap-northeast-1a"
-  tags = local.tags
-
+  tags              = merge(local.tags, {Name="${var.name}-public"})
   map_public_ip_on_launch = true
 }
 
@@ -16,7 +15,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 
   vpc_id = aws_vpc.vpc.id
 
-  tags = local.tags
+  tags = merge(local.tags, { Name = "${var.name}-ig" })
 }
 
 resource "aws_route_table" "internet-route-table" {
@@ -26,7 +25,7 @@ resource "aws_route_table" "internet-route-table" {
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
 
-  tags = local.tags
+  tags = merge(local.tags, { Name = "${var.name}-rt" })
 }
 
 resource "aws_route_table_association" "associate_routetable_to_public_subnet" {
@@ -40,7 +39,8 @@ resource "aws_route_table_association" "associate_routetable_to_public_subnet" {
 
 # elastic ip
 resource "aws_eip" "elastic_ip" {
-  vpc      = true
+  vpc = true
+  tags = merge(local.tags, {Name="${var.name}-eip"})
 }
 
 # NAT gateway
@@ -52,9 +52,8 @@ resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.elastic_ip.id
   subnet_id     = aws_subnet.public_subnet.id
 
-  tags = {
-    Name = "nat-gateway"
-  }
+
+  tags = merge(local.tags, { Name = "${var.name}-nat-gateway" })
 }
 
 resource "aws_route_table" "NAT_route_table" {
@@ -70,9 +69,7 @@ resource "aws_route_table" "NAT_route_table" {
     gateway_id = aws_nat_gateway.nat_gateway.id
   }
 
-  tags = {
-    Name = "NAT-route-table"
-  }
+  tags = merge(local.tags, { Name = "${var.name}-nat-rt" })
 }
 
 # associate route table to private subnet
