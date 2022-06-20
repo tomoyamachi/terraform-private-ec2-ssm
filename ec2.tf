@@ -52,22 +52,18 @@ resource "aws_instance" "ec2" {
   # EBS最適化を有効
   #  ebs_optimized = true
   # EBSのルートボリューム設定
-#  root_block_device {
-#    # ボリュームサイズ(GiB)
-#    volume_size           = 8
-#    # ボリュームタイプ
-#    volume_type           = "gp3"
-#    # GP3のIOPS
-#    iops                  = 3000
-#    # GP3のスループット
-#    throughput            = 125
-#    # EC2終了時に削除
-#    delete_on_termination = true
-#
-#    tags = local.tags
-#  }
+  root_block_device {
+    # ボリュームサイズ(GiB)
+    volume_size           = var.block_volume_size
+    volume_type           = "gp3"
+    delete_on_termination = true
+    tags                  = merge(local.tags, { Name = "${var.name}-block" })
+  }
+  lifecycle {
+    prevent_destroy : true
+  }
 
-  tags = merge(local.tags, {Name="${var.name}-ec2"})
+  tags = merge(local.tags, { Name = "${var.name}-ec2" })
 }
 
 ####################
@@ -84,7 +80,7 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(local.tags, {Name="${var.name}-sg-ec2"})
+  tags = merge(local.tags, { Name = "${var.name}-sg-ec2" })
 }
 
 
