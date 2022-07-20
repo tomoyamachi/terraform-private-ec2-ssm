@@ -4,13 +4,24 @@ variable "name" {
   default     = "test"
 }
 
+variable "image_id" {
+  type    = string
+}
+
 variable "instance" {
   type    = string
   default = "t2.medium"
 }
+
 variable "block_volume_size" {
   type    = number
   default = 16
+}
+
+variable "session_role" {
+  type    = string
+  description = "接続するユーザが利用するRole ex) OrganizationAccountAccessRole"
+# default = "OrganizationAccountAccessRole"
 }
 
 locals {

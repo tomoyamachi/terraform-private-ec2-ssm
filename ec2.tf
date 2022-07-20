@@ -1,4 +1,4 @@
-data "aws_ami" "example" {
+data "aws_ami" "latest_amznlinux2" {
   most_recent = true
   owners      = ["amazon"]
 
@@ -38,13 +38,11 @@ data "aws_ami" "example" {
 # EC2
 ####################
 resource "aws_instance" "ec2" {
-  # Amazon Linux 2
-  ami                    = data.aws_ami.example.image_id
+  ami = var.image_id != "" ? var.image_id : data.aws_ami.latest_amznlinux2.image_id
   instance_type          = var.instance
   vpc_security_group_ids = [aws_security_group.ec2.id]
   key_name               = aws_key_pair.example.id
   subnet_id              = aws_subnet.private_subnet.id
-
 
   # IAM Role
   iam_instance_profile = "EC2RoleforSSM"
@@ -59,9 +57,9 @@ resource "aws_instance" "ec2" {
     delete_on_termination = true
     tags                  = merge(local.tags, { Name = "${var.name}-block" })
   }
-  lifecycle {
-    prevent_destroy : true
-  }
+  #lifecycle {
+  #  prevent_destroy = true
+  #}
 
   tags = merge(local.tags, { Name = "${var.name}-ec2" })
 }

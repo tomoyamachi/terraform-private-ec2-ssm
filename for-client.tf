@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "assume_role" {
     actions   = [ "sts:AssumeRole" ]
     principals {
       type = "AWS"
-      identifiers = [ data.aws_caller_identity.current.arn ]
+      identifiers = [ "arn:aws:sts::${data.aws_caller_identity.current.account_id}:role/${var.session_role}" ]
     }
 #    condition {
 #      test     = "Bool"
