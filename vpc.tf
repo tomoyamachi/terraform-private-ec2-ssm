@@ -16,7 +16,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_subnet" "sub_privatelink_1a" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.1.0/24"
-  availability_zone = "ap-northeast-1a"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = merge(local.tags, {Name="${var.name}-privatelink"})
 }
@@ -24,7 +24,7 @@ resource "aws_subnet" "sub_privatelink_1a" {
 resource "aws_subnet" "private_subnet" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.11.0/24"
-  availability_zone = "ap-northeast-1a"
+  availability_zone = data.aws_availability_zones.available.names[0]
   tags = merge(local.tags, {Name="${var.name}-private"})
 }
 
