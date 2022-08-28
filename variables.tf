@@ -12,6 +12,10 @@ variable "instance" {
   default = "t2.medium"
 }
 
+variable "spot_instance" {
+  type    = bool
+}
+
 variable "block_volume_size" {
   type    = number
   default = 16

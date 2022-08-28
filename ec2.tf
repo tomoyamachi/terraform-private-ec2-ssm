@@ -38,11 +38,13 @@ data "aws_ami" "latest_amznlinux2" {
 # EC2
 ####################
 resource "aws_instance" "ec2" {
-  ami = var.image_id != "" ? var.image_id : data.aws_ami.latest_amznlinux2.image_id
-  instance_type          = var.instance
-  vpc_security_group_ids = [aws_security_group.ec2.id]
-  key_name               = aws_key_pair.example.id
-  subnet_id              = aws_subnet.private_subnet.id
+  count = var.spot_instance ? 0 : 1
+
+  ami                            = var.image_id != "" ? var.image_id : data.aws_ami.latest_amznlinux2.image_id
+  instance_type                  = var.instance
+  vpc_security_group_ids         = [aws_security_group.ec2.id]
+  key_name                       = aws_key_pair.example.id
+  subnet_id                      = aws_subnet.private_subnet.id
 
   # IAM Role
   iam_instance_profile = "EC2RoleforSSM"
@@ -63,6 +65,33 @@ resource "aws_instance" "ec2" {
 
   tags = merge(local.tags, { Name = "${var.name}-ec2" })
 }
+
+resource "aws_spot_instance_request" "ec2" {
+  count                  = var.spot_instance ? 1 : 0
+  instance_interruption_behavior = "stop"
+  wait_for_fulfillment   = true
+  ami                    = var.image_id != "" ? var.image_id : data.aws_ami.latest_amznlinux2.image_id
+  instance_type          = var.instance
+  vpc_security_group_ids = [aws_security_group.ec2.id]
+  key_name               = aws_key_pair.example.id
+  subnet_id              = aws_subnet.private_subnet.id
+
+  # IAM Role
+  iam_instance_profile = "EC2RoleforSSM"
+
+  # EBS最適化を有効
+  #  ebs_optimized = true
+  # EBSのルートボリューム設定
+  root_block_device {
+    # ボリュームサイズ(GiB)
+    volume_size           = var.block_volume_size
+    volume_type           = "gp3"
+    delete_on_termination = true
+    tags                  = merge(local.tags, { Name = "${var.name}-block" })
+  }
+  tags = merge(local.tags, { Name = "${var.name}-ec2" })
+}
+
 
 ####################
 # EC2 Security Group
