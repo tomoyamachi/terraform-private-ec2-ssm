@@ -1,15 +1,21 @@
 variable "name" {
   type        = string
-  description = "VPC and Instance name."
+  description = "prefix of resource name"
 }
 
 variable "image_id" {
   type    = string
+  description = "AMI Image ID. Use latest Amazon Linux2 AMI when set empty value"
 }
 
 variable "instance" {
   type    = string
   default = "t2.medium"
+}
+
+variable "key_name" {
+  type    = string
+  description = "ssh-keygen -t rsa -f <here> -N ''"
 }
 
 variable "spot_instance" {
@@ -23,7 +29,7 @@ variable "block_volume_size" {
 
 variable "session_role" {
   type    = string
-  description = "接続するユーザが利用するRole ex) OrganizationAccountAccessRole"
+  description = "User session role ex) OrganizationAccountAccessRole"
 }
 
 data "aws_availability_zones" "available" {
